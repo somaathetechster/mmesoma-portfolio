@@ -1,0 +1,308 @@
+export const projects = [
+  {
+    id: "infinitswap",
+    name: "Infinitswap",
+    tagline: "An AI-native financial assistant that speaks your language — literally.",
+    category: "Conversational AI · FinTech",
+    status: "Live",
+    statusColor: "green",
+    year: "2024–2025",
+    cover: null, // drop screenshot here
+    headline: "Replacing a complex financial app with a conversation",
+    problem: `Most fintech products assume users want dashboards, menus, and forms. For users across Nigeria, Ghana, Tanzania, and South Africa — many interacting with digital finance for the first time — that assumption fails completely. The real insight: everyone already knows how to have a conversation.`,
+    aiAngle: `I designed and implemented an AI orchestration layer that converts free-form natural language — "I want to send 50k to my sister's GTB account" — into a structured, validated, executed financial transaction. No forms. No menus. The AI understands intent, extracts entities, resolves ambiguity, and executes.`,
+    aiComponents: [
+      "Natural language intent classification — distinguishes buy, sell, send, withdraw, check balance from conversational input",
+      "Entity extraction engine — pulls out amounts, currencies, recipient names, bank names, account numbers from unstructured text",
+      "Ambiguity resolution — when a message is unclear, the AI generates clarifying questions instead of failing silently",
+      "Onboarding intelligence — guides first-time users through KYC and account setup through adaptive conversation",
+      "Automated transaction narration — AI-generated receipt descriptions in plain language, not transaction codes",
+      "Multi-intent detection — recognises when a single message contains multiple requests and handles them sequentially",
+    ],
+    impact: [
+      "Zero-UI financial transactions — users complete exchanges entirely through natural conversation",
+      "4 markets served — Nigeria, Ghana, Tanzania, South Africa — with market-specific language handling",
+      "Reduced onboarding abandonment — conversational KYC replaced multi-step form flow",
+      "Full automation — from intent detection to PSP execution to receipt delivery, no human intervention",
+    ],
+    snippets: [
+      {
+        label: "NLP intent routing — what happens when a user sends a message",
+        lang: "javascript",
+        code: `// Every incoming message passes through the AI classification layer
+// before touching any business logic
+async function classifyAndRoute(session, rawMessage) {
+  const { intent, entities, confidence } = await nlpClassify(rawMessage);
+
+  // Low confidence → ask the user to clarify rather than guess
+  if (confidence < 0.72) {
+    return generateClarificationPrompt(rawMessage, session.context);
+  }
+
+  // Map detected intent to the correct financial workflow
+  const handlers = {
+    SEND_FIAT:       () => initiateFiatTransfer(session, entities),
+    BUY_CRYPTO:      () => initiateCryptoPurchase(session, entities),
+    SELL_CRYPTO:     () => initiateCryptoSale(session, entities),
+    CHECK_BALANCE:   () => fetchAndFormatBalance(session),
+    BUY_AIRTIME:     () => initiateAirtimePurchase(session, entities),
+    START_KYC:       () => beginKYCFlow(session),
+  };
+
+  return handlers[intent]?.() ?? handleUnknownIntent(session, rawMessage);
+}`
+      },
+      {
+        label: "Entity extraction — parsing 'send 50k to Amaka GTB' into structured data",
+        lang: "javascript",
+        code: `// AI extracts structured financial data from conversational input
+// "send 50k to my sister Amaka, her GTB number is 0123456789"
+async function extractTransferEntities(message) {
+  const prompt = buildEntityExtractionPrompt(message, {
+    targets: ['amount', 'currency', 'recipient_name', 'bank_name', 'account_number'],
+    context: 'Nigerian financial transaction',
+    normalisations: {
+      '50k': 50000, '5k': 5000,   // local shorthand
+      'GTB': 'Guaranty Trust Bank',
+      'UBA': 'United Bank for Africa',
+    }
+  });
+
+  const extracted = await aiClient.extract(prompt);
+
+  // Validate before any transaction logic runs
+  return validateTransferEntities(extracted);
+}`
+      }
+    ],
+    lessons: "The most important AI design principle I learned here: a system that admits uncertainty is more trustworthy than one that guesses confidently. The confidence threshold and clarification flow made users trust the system more, not less.",
+  },
+
+  {
+    id: "primestakecorp",
+    name: "PrimestakeCorp",
+    tagline: "AI-assisted intelligence layer for a global staking platform.",
+    category: "FinTech · AI Product Design",
+    status: "Live",
+    statusColor: "green",
+    year: "2024",
+    cover: null,
+    headline: "Making complex DeFi decisions legible to everyday investors",
+    problem: `Staking platforms speak in APY percentages, lock-up periods, validator risk scores, and protocol terminology. For the majority of users — who understand that they want their money to grow, but not the mechanics of how — this creates a massive comprehension gap that leads to poor decisions, abandoned onboarding, and churn.`,
+    aiAngle: `I contributed to an AI-assisted intelligence layer that interprets user goals ("I want steady returns, low risk") and translates them into staking recommendations, risk explanations, and portfolio summaries in plain language. The AI acts as a financial co-pilot — not replacing user decisions, but making them informed.`,
+    aiComponents: [
+      "Goal-to-recommendation engine — maps user risk tolerance and return expectations to appropriate staking options",
+      "Plain-language risk translation — converts validator performance metrics and protocol data into understandable summaries",
+      "Portfolio narrative generation — AI-written summaries of what a user's staking portfolio is doing and why",
+      "Onboarding intelligence — adaptive question flow that builds a user profile without overwhelming first-time investors",
+      "Anomaly flagging — surfaces unusual platform activity to users in human-readable alerts, not raw data",
+    ],
+    impact: [
+      "Reduced decision paralysis — users reached staking confirmation faster with AI guidance than without",
+      "Improved onboarding completion — adaptive AI flow replaced static multi-step form",
+      "Global platform — served users across multiple time zones with localised communication",
+    ],
+    snippets: [
+      {
+        label: "Goal-to-recommendation engine — translating user intent into staking options",
+        lang: "javascript",
+        code: `// User tells us what they want in plain terms
+// AI maps that to concrete staking recommendations
+async function recommendStakingOptions(userProfile) {
+  const { riskTolerance, targetReturn, lockupPreference } = userProfile;
+
+  const systemPrompt = \`You are a staking advisor. Given a user's financial goals,
+    recommend 2-3 staking options from the available pools below.
+    Explain each option in plain language. Never use jargon without explaining it.
+    Risk tolerance: \${riskTolerance} | Target APY: \${targetReturn}%\`;
+
+  const availablePools = await fetchActivePools();
+
+  const recommendations = await ai.complete({
+    system: systemPrompt,
+    user: \`Available pools: \${JSON.stringify(availablePools)}
+           User preference on lock-up: \${lockupPreference}\`,
+    format: 'structured_recommendations'
+  });
+
+  return enrichWithLiveData(recommendations);
+}`
+      }
+    ],
+    lessons: "AI is most valuable in financial products when it reduces cognitive load without reducing user agency. The goal is informed decisions made faster — not decisions made for you.",
+  },
+
+  {
+    id: "writeey",
+    name: "Writeey",
+    tagline: "An AI content system that learns your voice and works at your speed.",
+    category: "Generative AI · Content Technology",
+    status: "In Development",
+    statusColor: "amber",
+    year: "2024–2025",
+    cover: null,
+    headline: "AI that writes like you, not like everyone else",
+    problem: `Generic AI writing tools produce generic content. Every brand ends up with the same tone, the same sentence structures, the same phrasing. Content teams spend as much time editing AI output as they would writing from scratch — and the result still doesn't sound like them.`,
+    aiAngle: `Writeey is built on a core AI principle: personalisation at the model level, not the prompt level. Rather than asking users to write better prompts, the system builds a brand voice profile from approved content samples and uses that profile to condition every generation request. The AI learns what "your voice" sounds like.`,
+    aiComponents: [
+      "Brand voice profiling — extracts tone, vocabulary, sentence rhythm, and stylistic patterns from approved past content",
+      "Voice-conditioned generation — every generation request is informed by the user's learned brand profile, not just a system prompt",
+      "Consistency scoring — AI evaluates each draft against the brand profile and flags deviations before the user sees them",
+      "Iterative refinement loop — user feedback on drafts feeds back into the voice model, improving personalisation over time",
+      "Multi-format content engine — blog posts, social copy, email sequences, ad copy — each format has format-specific generation logic",
+      "SEO intelligence — keyword integration and readability optimisation built into the generation pipeline, not bolted on after",
+    ],
+    impact: [
+      "Brand voice consistency across all AI-generated content without manual prompt engineering",
+      "Reduced editing time — drafts require fewer revisions because the AI starts closer to the target voice",
+      "Scalable content production — teams produce more content without proportionally more people",
+    ],
+    snippets: [
+      {
+        label: "Voice profile extraction — learning what a brand sounds like",
+        lang: "javascript",
+        code: `// Writeey builds a voice profile from the brand's approved content
+// This runs once on setup, then updates as users approve/reject drafts
+async function buildVoiceProfile(approvedSamples) {
+  const analysisPrompt = \`Analyse these content samples and extract:
+    1. Tone descriptors (e.g. "direct but warm", "technical but accessible")
+    2. Vocabulary patterns — words/phrases used frequently
+    3. Words/phrases to avoid (identify from absence patterns)
+    4. Sentence length and structure preferences
+    5. How the brand addresses its audience (formal/informal, you/we/they)
+    Return structured JSON only.\`;
+
+  const profile = await ai.analyse({
+    system: analysisPrompt,
+    content: approvedSamples.map(s => s.body).join('\n---\n')
+  });
+
+  // Persist and version the profile
+  // future generations will use this as their conditioning context
+  return saveVoiceProfile(profile, { version: Date.now() });
+}`,
+      },
+      {
+        label: "Voice-conditioned generation — writing a draft that sounds like the brand",
+        lang: "javascript",
+        code: `async function generateDraft({ topic, format, userId }) {
+  // Load the brand's learned voice profile
+  const voiceProfile = await getVoiceProfile(userId);
+  const recentApproved = await getApprovedSamples(userId, { limit: 3 });
+
+  const system = \`You are a content writer for this brand.
+    Voice profile: \${JSON.stringify(voiceProfile)}
+    
+    Write in this exact voice. Do not deviate.
+    Below are 3 recently approved pieces — match their style:
+    \${recentApproved.map(s => s.body).join('\n---\n')}\`;
+
+  const draft = await ai.generate({ system, user: \`Write a \${format} about: \${topic}\` });
+
+  // Score against voice profile before returning to user
+  const consistencyScore = await scoreVoiceConsistency(draft, voiceProfile);
+
+  if (consistencyScore < 0.75) {
+    // Regenerate with stricter conditioning rather than show a weak draft
+    return generateDraft({ topic, format, userId, strict: true });
+  }
+
+  return { draft, consistencyScore, status: 'PENDING_REVIEW' };
+}`,
+      }
+    ],
+    lessons: "The insight that changed the product: users don't want to write better prompts, they want the AI to already know what they need. Moving personalisation from the prompt layer to the model-conditioning layer was the architectural decision that made Writeey different.",
+  },
+
+  {
+    id: "bumpa",
+    name: "Bumpa",
+    tagline: "AI-powered business intelligence for Africa's informal commerce layer.",
+    category: "AI · Business Operations",
+    status: "In Development",
+    statusColor: "amber",
+    year: "2025",
+    cover: null,
+    headline: "Giving informal traders the business intelligence that big companies take for granted",
+    problem: `Tens of millions of small traders across Africa run businesses entirely by memory and intuition — no records, no analytics, no visibility into what's actually working. They're making high-stakes decisions (what to stock, who to extend credit to, when to reorder) with no data. Not because they don't want data, but because every tool designed to provide it assumes a context that doesn't match their reality.`,
+    aiAngle: `Bumpa brings AI-powered business intelligence to traders who have never used a spreadsheet. The AI layer does the analytical heavy lifting — spotting trends, predicting restock timing, flagging customers who always pay late — and surfaces insights in plain language, in the format traders already use: short messages, not dashboards.`,
+    aiComponents: [
+      "Sales pattern recognition — AI identifies best-selling products, peak sales hours, and seasonal trends from transaction history",
+      "Credit risk scoring — lightweight AI model that scores customers by payment behaviour to inform credit decisions",
+      "Inventory intelligence — predicts restock timing based on sales velocity, not just current stock levels",
+      "Daily business digest — AI-generated plain-language summary of yesterday's performance, sent each morning",
+      "Anomaly detection — flags unusual drops in sales or unexpected increases in credit exposure",
+      "WhatsApp-native delivery — all AI insights delivered through WhatsApp, the interface traders already live in",
+    ],
+    impact: [
+      "Business intelligence accessible without literacy in spreadsheets or dashboards",
+      "Credit decisions backed by behavioural data, not gut feel",
+      "Automated stock management reduces both stockouts and overbuying",
+    ],
+    snippets: [
+      {
+        label: "Daily business digest — AI summarising a trader's day in plain language",
+        lang: "javascript",
+        code: `// Every morning, each trader receives an AI-generated summary
+// of their previous day — no dashboards, no spreadsheets
+async function generateDailyDigest(traderId, date) {
+  const [sales, inventory, credit] = await Promise.all([
+    getSalesSummary(traderId, date),
+    getInventoryAlerts(traderId),
+    getCreditSummary(traderId),
+  ]);
+
+  const prompt = \`You are a friendly business advisor for a small trader in Nigeria.
+    Summarise their business day in 4-5 short sentences.
+    Be specific about numbers. Be encouraging but honest.
+    Highlight the most important thing they should act on today.
+    Write in simple English. Avoid jargon.
+    
+    Data: \${JSON.stringify({ sales, inventory, credit })}\`;
+
+  const digest = await ai.generate({ user: prompt, maxTokens: 200 });
+
+  // Deliver via WhatsApp — the trader's primary interface
+  await sendWhatsAppMessage(trader.phone, digest);
+  return { digest, delivered: true };
+}`,
+      },
+      {
+        label: "Credit risk scoring — using payment history to inform lending decisions",
+        lang: "javascript",
+        code: `// AI model scores a customer's creditworthiness
+// based purely on their transaction history with the trader
+async function scoreCustomerCredit(customerId, traderId) {
+  const history = await getCustomerHistory(customerId, traderId);
+
+  const features = {
+    totalTransactions:    history.length,
+    avgDaysToPay:         calculateAvgPaymentDelay(history),
+    latePaymentRate:      history.filter(t => t.paidLate).length / history.length,
+    largestCreditTaken:   Math.max(...history.map(t => t.creditAmount)),
+    currentOutstanding:   history.filter(t => !t.settled).reduce((s, t) => s + t.amount, 0),
+  };
+
+  const { score, reasoning } = await ai.score({
+    system: 'Credit scoring for informal trade. Score 0-100. Explain in one sentence.',
+    user: JSON.stringify(features)
+  });
+
+  return {
+    score,                    // 0-100
+    recommendation: score > 65 ? 'EXTEND_CREDIT' : 'REQUEST_PARTIAL_UPFRONT',
+    explanation: reasoning,   // plain language, shown to trader
+  };
+}`,
+      }
+    ],
+    lessons: "Building for informal markets forced me to question every assumption about how software should work. The AI has to be the interface, not just a feature inside one — because the people who need it most have never opened a business software dashboard in their lives.",
+  },
+];
+
+export const disciplines = [
+  { icon: "◈", title: "AI Workflow Design", desc: "Designing end-to-end AI systems — from prompt architecture to orchestration logic to user-facing output." },
+  { icon: "⬡", title: "Conversational AI", desc: "Building NLP layers that turn natural language into structured, executable system actions." },
+  { icon: "▣", title: "Full-Stack Engineering", desc: "Frontend to backend to database — React, Node.js, TypeScript, PostgreSQL, Redis." },
+  { icon: "◎", title: "AI Product Strategy", desc: "Deciding where AI adds real value in a product and where it's just noise — and building accordingly." },
+];
