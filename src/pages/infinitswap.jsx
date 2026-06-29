@@ -11,12 +11,12 @@ import CodeBlock from "../../components/CodeBlock";
 ─────────────────────────────────────────────────────────────────────────────── */
 
 const IMAGES = {
-  HERO_COVER:     "public/images/infinitswap-dashboard-overview.png",
-  WHATSAPP_1:     "public/images/infinitswap-whatsapp-morning-digest.png",
-  WHATSAPP_2:     "public/images/infinitswap-whatsapp-pin-transfer.png",
-  WHATSAPP_3:     "public/images/infinitswap-whatsapp-service-menu.png",
-  ADMIN_MESSAGES: "public/images/infinitswap-admin-bot-messages.png",
-  CODE_BRAIN:     "public/images/infinitswap-agentbrain-code.png",
+  HERO_COVER:     "/images/infinitswap-dashboard-overview.png",
+  WHATSAPP_1:     "/images/infinitswap-whatsapp-morning-digest.png",
+  WHATSAPP_2:     "/images/infinitswap-whatsapp-pin-transfer.png",
+  WHATSAPP_3:     "/images/infinitswap-whatsapp-service-menu.png",
+  ADMIN_MESSAGES: "/images/infinitswap-admin-bot-messages.png",
+  CODE_BRAIN:     "/images/infinitswap-agentbrain-code.png",
 };
 
 /* ─── DESIGN TOKENS ───────────────────────────────────────────────────────── */
