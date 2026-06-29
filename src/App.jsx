@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import Cursor from "./components/Cursor";
 import Home from "./pages/Home";
 import Project from "./pages/Project";
-import InfinitswapProject from "./pages/projects/Infinitswap";
+import InfinitswapProject from "./pages/projects/infinitswap";
 import "./styles/globals.css";
 
 function ScrollTop() {
