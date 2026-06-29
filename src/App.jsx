@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import Cursor from "./components/Cursor";
 import Home from "./pages/Home";
 import Project from "./pages/Project";
+import InfinitswapProject from "./pages/projects/Infinitswap";
 import "./styles/globals.css";
 
 function ScrollTop() {
@@ -22,6 +23,9 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
+          {/* Dedicated full-documentation pages */}
+          <Route path="/project/infinitswap" element={<InfinitswapProject />} />
+          {/* Generic fallback for other projects */}
           <Route path="/project/:id" element={<Project />} />
         </Routes>
       </main>
